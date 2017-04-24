@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<meta name="viewport" content="width=device-width, initial-scale=0.74, maximum-scale=0.74, user-scalable=no">
+<title>demo</title>
+
+
+<link rel="stylesheet" href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+
+
+<style type="text/css">
+	.J-treeBtn { cursor: pointer}
+	.J-datagrid-row-selected td { background: #ff5}
+	.fa-check { color: green}
+	.fa-times { color: red}
+</style>
+
+
+
+
+
+
+</head>
+
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-4 ">
+			
+			<div class="panel panel-default">
+				<div class="panel-heading">demo</div>
+				<div class="panel-body">
+					<a class="btn btn-default" onclick="collapseAll()">摺起所有</a>
+					<a class="btn btn-default" onclick="expandAll()">展开所有</a>
+				</div>
+				
+
+				<table  id="ContentCateTree" class="table table-hover table-tree "></table>	
+			</div>
+		</div>
+		<div class="col-sm-8" >
+			<h1>kanTreegrid</h1>
+			<p>这是一个简单轻量的用于创建树形表格的jquery插件</p>
+			<p>制作本插件是因为感觉原先项目使用easyui中的treegrid比较大，而且个别功能用不上，所而就制作了一个简单轻量的treegrid，其用法与easyui中的treegrid差不多。</p>
+
+			<h2>一·用法</h2>
+			<p>创建一个table</p>
+			<h4>HTML</h4>			
+			<pre >&lt;table  id=&quot;ContentCateTree&quot; &gt;&lt;/table&gt;</pre>
+			<p></p>			
+			<h4>JS</h4>			
+			<pre >
+$('#ContentCateTree').kanTreegrid({
+    idField:'catid'
+    ,treeField:'catname'
+    ,url:'data.json'
+    ,cache:true
+    ,columns:[[
+      {field:'catid',title:'ID',width:'10%'},
+      {field:'catname',title:'欄目'},
+      {field:'allow',title:'-',formatter:formatType}
+    ]]
+    ,onBeforeLoad:function(){}
+    ,onLoadSuccess:function(){           }
+    ,onClickRow:function(node){alert(node.catname);}
+});				
+			</pre>
+			<h4>注:</h4>
+			<p>此插件本身不带样式，而本demo页面使用bootstrap作为样式</p>
+			<p>本插件使用了FontAwesome字体图标，若不想使用，你可自行写样式进行修改。</p>
+			
+			<h2>二·设置 options</h2>
+			<table class="table table-bordered">
+				<thead>
+					<tr><td>名称</td><td>说明</td></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>idField</td>
+						<td>标识树节点id的字段</td>
+					</tr>
+					<tr>
+						<td>treeField</td>
+						<td>定义生成树形的字段</td>
+					</tr>
+					<tr>
+						<td>columns</td>
+						<td>设置要显示的字段</td>
+					</tr>
+					<tr>
+						<td>url</td>
+						<td>请求数据的地址</td>
+					</tr>
+					<tr>
+						<td>cache</td>
+						<td>是否缓存，默认为false</td>
+					</tr>
+					<tr>
+						<td>method</td>
+						<td>get/post，ajax请求方法，默认为get</td>
+					</tr>
+					<tr>
+						<td>datas</td>
+						<td>加载指定的数据，只接受json格式</td>
+					</tr>					
+				</tbody>
+			</table>
+			<h2>三·事件 </h2>
+			<table class="table table-bordered">
+				<thead>
+					<tr><td>事件</td><td>参数</td><td>说明</td></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>onClickRow</td>
+						<td>row</td>
+						<td>当点击一行数据时触发</td>
+					</tr>
+					<tr>
+						<td>onBeforeLoad</td>
+						<td>options</td>
+						<td>数据加载前触发</td>
+					</tr>
+					<tr>
+						<td>onLoadSuccess</td>
+						<td>datas</td>
+						<td>数据加载完成时触发</td>
+					</tr>
+					<tr>
+						<td>onSelect</td>
+						<td>row</td>
+						<td>当行被选择时触发</td>
+					</tr>
+					
+				</tbody>
+			</table>
+			<h2>四·方法 </h2>
+			<table class="table table-bordered">
+				<thead>
+					<tr><td>方法</td><td>参数</td><td>说明</td></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>getSetting</td>
+						<td>name</td>
+						<td>取得指定设置值，当name为null时，取得所有设置</td>
+					</tr>
+					<tr>
+						<td>reload</td>
+						<td>null</td>
+						<td>重载数据</td>
+					</tr>
+					<tr>
+						<td>getData</td>
+						<td>null</td>
+						<td>取得所有数据</td>
+					</tr>
+					
+					<tr>
+						<td>find</td>
+						<td>id</td>
+						<td>查找指定id节点，并返回该节点的数据</td>
+					</tr>
+					<tr>
+						<td>select</td>
+						<td>id</td>
+						<td>选择指定id的节点</td>
+					</tr>
+					<tr>
+						<td>getSelected</td>
+						<td>null</td>
+						<td>取得当前被选的节点</td>
+					</tr>
+					<tr>
+						<td>getSelectedData</td>
+						<td>null</td>
+						<td>取得已选择节点的数据</td>
+					</tr>
+					<tr>
+						<td>unselect</td>
+						<td>id</td>
+						<td>取消指定id节点的选择，当id为null时，取消所有选择</td>
+					</tr>
+					<tr>
+						<td>expand</td>
+						<td>id</td>
+						<td>展开指定id的节点</td>
+					</tr>
+					<tr>
+						<td>expandAll</td>
+						<td>null</td>
+						<td>展开所有节点</td>
+					</tr>
+					<tr>
+						<td>collapse</td>
+						<td>id</td>
+						<td>摺起指定id的节点</td>
+					</tr>
+					<tr>
+						<td>collapseAll</td>
+						<td>null</td>
+						<td>摺起所有节点</td>
+					</tr>
+					
+					
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+	
+
+	
+</div>
+<script src="http://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="../src/kanTreegrid.js"></script>
+
+<script type="text/javascript">
+    
+	$('#ContentCateTree').kanTreegrid({
+        idField:'catid'
+        ,treeField:'catname'
+        ,url:'data.json'
+        ,cache:true
+        ,columns:[[
+          {field:'catid',title:'ID',width:'10%'},
+          {field:'catname',title:'栏目'},
+          {field:'allow',title:'-',formatter:formatType}
+        ]]
+        ,onSelect:function(node){
+        	console.log(node);
+        }
+        ,onClickRow:function(node){
+        	console.log(node);
+            alert('onClickRow: '+node.catname);
+        }
+    });
+    
+	function formatType(value,row){
+		var html = value=='0'? '<i class="fa fa-times"></i>' : '<i class="fa fa-check"></i>';
+		return html;
+	}
+
+    function collapseAll(){
+        $('#ContentCateTree').kanTreegrid('collapseAll');
+    }
+    function expandAll(){
+        $('#ContentCateTree').kanTreegrid('expandAll');
+
+    }
+</script>
+</body>
+</html>
