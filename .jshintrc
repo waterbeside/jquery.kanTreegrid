@@ -1,0 +1,24 @@
+{
+  "bitwise": true,
+  "curly": true,
+  "eqeqeq": true,
+  "forin": true,
+  "freeze": true,
+  "futurehostile": true,
+  "latedef": "nofunc",
+  "noarg": true,
+  "nonbsp": true,
+  "nonew": true,
+  "singleGroups": true,
+  "noempty":true,
+  "trailing":true,
+  "undef": true,
+  "unused": true,
+  "strict": true,
+  "laxcomma":true,
+
+  "browser": true,
+  "devel": true,
+  "jquery": true,
+  "node":true
+}
