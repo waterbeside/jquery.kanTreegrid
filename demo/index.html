@@ -31,16 +31,16 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-4 ">
-			
+
 			<div class="panel panel-default">
 				<div class="panel-heading">demo</div>
 				<div class="panel-body">
 					<a class="btn btn-default" onclick="collapseAll()">摺起所有</a>
 					<a class="btn btn-default" onclick="expandAll()">展开所有</a>
 				</div>
-				
 
-				<table  id="ContentCateTree" class="table table-hover table-tree "></table>	
+
+				<table  id="ContentCateTree" class="table table-hover table-tree "></table>
 			</div>
 		</div>
 		<div class="col-sm-8" >
@@ -50,10 +50,10 @@
 
 			<h2>一·用法</h2>
 			<p>创建一个table</p>
-			<h4>HTML</h4>			
+			<h4>HTML</h4>
 			<pre >&lt;table  id=&quot;ContentCateTree&quot; &gt;&lt;/table&gt;</pre>
-			<p></p>			
-			<h4>JS</h4>			
+			<p></p>
+			<h4>JS</h4>
 			<pre >
 $('#ContentCateTree').kanTreegrid({
     idField:'catid'
@@ -65,15 +65,15 @@ $('#ContentCateTree').kanTreegrid({
       {field:'catname',title:'欄目'},
       {field:'allow',title:'-',formatter:formatType}
     ]]
-    ,onBeforeLoad:function(){}
-    ,onLoadSuccess:function(){           }
+    ,onBeforeLoad:function(options){console.log(options);}
+    ,onLoadSuccess:function(datas){console.log(datas);}
     ,onClickRow:function(node){alert(node.catname);}
-});				
+});
 			</pre>
 			<h4>注:</h4>
 			<p>此插件本身不带样式，而本demo页面使用bootstrap作为样式</p>
 			<p>本插件使用了FontAwesome字体图标，若不想使用，你可自行写样式进行修改。</p>
-			
+
 			<h2>二·设置 options</h2>
 			<table class="table table-bordered">
 				<thead>
@@ -107,7 +107,7 @@ $('#ContentCateTree').kanTreegrid({
 					<tr>
 						<td>datas</td>
 						<td>加载指定的数据，只接受json格式</td>
-					</tr>					
+					</tr>
 				</tbody>
 			</table>
 			<h2>三·事件 </h2>
@@ -136,7 +136,7 @@ $('#ContentCateTree').kanTreegrid({
 						<td>row</td>
 						<td>当行被选择时触发</td>
 					</tr>
-					
+
 				</tbody>
 			</table>
 			<h2>四·方法 </h2>
@@ -160,7 +160,7 @@ $('#ContentCateTree').kanTreegrid({
 						<td>null</td>
 						<td>取得所有数据</td>
 					</tr>
-					
+
 					<tr>
 						<td>find</td>
 						<td>id</td>
@@ -206,22 +206,22 @@ $('#ContentCateTree').kanTreegrid({
 						<td>null</td>
 						<td>摺起所有节点</td>
 					</tr>
-					
-					
+
+
 				</tbody>
 			</table>
 		</div>
 	</div>
-	
-	
 
-	
+
+
+
 </div>
-<script src="http://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-<script src="../src/kanTreegrid.js"></script>
-
+<script src="//cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="../build/jquery.kanTreegrid.min.js"></script>
+<!-- <script src="../src/jquery.kanTreegrid.js"></script> -->
 <script type="text/javascript">
-    
+
 	$('#ContentCateTree').kanTreegrid({
         idField:'catid'
         ,treeField:'catname'
@@ -240,7 +240,7 @@ $('#ContentCateTree').kanTreegrid({
             alert('onClickRow: '+node.catname);
         }
     });
-    
+
 	function formatType(value,row){
 		var html = value=='0'? '<i class="fa fa-times"></i>' : '<i class="fa fa-check"></i>';
 		return html;

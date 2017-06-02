@@ -1,10 +1,9 @@
-/*
- * jQuery treegrid Plugin 仿easyui的treegrid，不過功能少點，相對精簡，樣式使用bootstrap,圖標使用FA;
- * Copyright 2013, 紫蘇醬(Loch Kan) <454831746@qq.com>
- * 20151116改，重构
- 20160128，返回node時，添加包含當前節點dom對像$node
- */
+/*!
+ jquery.kanTreegrid.js v1.0.0 | https://github.com/waterbeside/jquery.kanTreegrid.js (2017-06-02)
+ Copyright (c) 簡(Kan) <waterbeside@126.com>
+*/
 ;(function($) {
+	"use strict";
 	var methods = {
 		defaults : {
 			idField:'id'
@@ -20,14 +19,11 @@
 			]]
 		},
 
-		
 		init:function(params){
 			var options = $.extend({}, methods.defaults, params);
-
-			
 			methods.target = this;
 			return this.each(function () {
-				//console.log(this.options)	
+				//console.log(this.options)
 				//console.log(this.options.columns[0])
 				var $this = $(this);
 				$this.kanTreegrid('setTreeContainer',$(this));
@@ -37,12 +33,12 @@
 				$(this).html(html_thead);
 				$(this).append($(this).kanTreegrid('_domTbodyWrap'));
 				if(options.url){
-					$(this).kanTreegrid('load',options.params);	
+					$(this).kanTreegrid('load',options.params);
 				}else if(options.datas){
 					$(this).kanTreegrid('loadData',options.datas);
 				}
-				
-			})
+
+			});
 		},
 
 
@@ -64,81 +60,69 @@
 				success:function(datas){
 					$this.children('tbody').html('');
 					$this.kanTreegrid('loadData',datas);
-					
+
 				}
-			})
+			});
 		},
 
 		reload:function(params){
 			var $this = $(this);
 			var options = $this.kanTreegrid('getSetting');
-			var dataParams  = typeof(options.params) == "undefined" ? params : $.extend({}, options.params, params);
+			var dataParams  = typeof options.params === "undefined" ? params : $.extend({}, options.params, params);
 			$(this).kanTreegrid('load',dataParams);
 		},
 
 
 		loadData:function(datas){
 			var $this = $(this);
-			var options = $this.kanTreegrid('getSetting')
+			var options = $this.kanTreegrid('getSetting');
 			$this.kanTreegrid('setData',datas);
 			$this.kanTreegrid('_domTbody',{'datas':datas,'deep':0});
-			
+
 			var $tbody = $this.children('tbody');
 			var $tr = $tbody.children('tr');
 			$tr.each(function(){
-
 				var $row = $(this);
 				var itemId = $row.attr('data-id');
-				
+
 				$(this).find('.J-treeBtn').click(function(e){
 					e.preventDefault();
 					e.stopPropagation();
-					var $children =$tbody.children('tr[data-pid='+itemId+']');
-					var $fa = $(this).children(".fa") ;
+					//var $children =$tbody.children('tr[data-pid='+itemId+']');
+					//var $fa = $(this).children(".fa") ;
 					if($row.hasClass('tree-collapsable')){
 						$this.kanTreegrid('collapse',itemId);
 					}else{
 						$this.kanTreegrid('expand',itemId);
 					}
-					
-				/*if($fa.hasClass('fa-folder-open')){
-						console.log('collapse');
-						$fa.removeClass('fa-folder-open').addClass('fa-folder');
-						$this.kanTreegrid('collapse',itemId);
-						
-					}else{
-						$fa.removeClass('fa-folder').addClass('fa-folder-open');
-						$this.kanTreegrid('expand',itemId);
-					}*/
-					
-				})
-				$(this).click(function(e){
+
+				});
+				$(this).click(function(){
 					var thisid = $(this).attr('data-id');
-					$this.kanTreegrid('select',thisid)
+					$this.kanTreegrid('select',thisid);
 					//console.log($this.kanTreegrid('find',thisid));
-					
-					if(typeof(options.onClickRow)=="function"){
+					if(typeof options.onClickRow ==="function"){
 						options.onClickRow($this.kanTreegrid('getSelectedData'));
 					}
-					
-				})
-			})
-			if(typeof(options.onLoadSuccess)=="function"){
+
+				});
+			});
+			if(typeof options.onLoadSuccess ==="function"){
 				options.onLoadSuccess(datas);
 			}
 			//methods.response = {}
 			//if(methods.options.callback){ methods.options.callback(this.response); }else{ return(methods.response); }
 		},
-	
+
 		//取得设置
         getSetting: function(name) {
             if (!$(this).kanTreegrid('getTreeContainer')) {
                 return null;
             }
-            if(typeof(name)=='undefined'){
+            if(typeof name ==='undefined'){
             	return $(this).kanTreegrid('getTreeContainer').data('settings');
             }else{
-            	return $(this).kanTreegrid('getTreeContainer').data('settings')[name];	
+            	return $(this).kanTreegrid('getTreeContainer').data('settings')[name];
             }
         },
 		//添加设置
@@ -153,10 +137,10 @@
         setTreeContainer: function(container) {
             return $(this).data('kanTreegrid', container);
         },
-        
+
         //设置加载的树数据
         setData: function(datas) {
-            $(this).kanTreegrid('getTreeContainer').data('datas', datas); 
+            $(this).kanTreegrid('getTreeContainer').data('datas', datas);
         },
         //取得所有树数据
         getData: function() {
@@ -165,7 +149,7 @@
 
 		//设置选择的节点
         setSelected: function(obj) {
-            $(this).kanTreegrid('getTreeContainer').data('selected', obj); 
+            $(this).kanTreegrid('getTreeContainer').data('selected', obj);
         },
         //取得节点
         getSelected: function() {
@@ -184,56 +168,55 @@
 			var $row  = $(this).children('tbody').children('tr[data-id='+id+']');
 			$row.addClass('J-datagrid-row-selected').siblings('tr').removeClass('J-datagrid-row-selected');
 			var datas = $(this).kanTreegrid('find',id);
-			$(this).kanTreegrid('setSelectedData',datas)
+			$(this).kanTreegrid('setSelectedData',datas);
 			//console.log($(this).kanTreegrid('getSelectedData'));
-			$(this).kanTreegrid('setSelected',$row)
-			if(typeof(options.onSelect)=="function"){
+			$(this).kanTreegrid('setSelected',$row);
+			if(typeof options.onSelect ==="function"){
 				options.onSelect($(this).kanTreegrid('getSelectedData'));
 			}
 			return $row;
 		},
 		//取消選擇節點
 		unselect:function(id){
-			if(typeof(id)=="undefined"){
-				$(this).children('tbody').children('tr').removeClass('J-datagrid-row-selected');	
+			if(typeof id ==="undefined"){
+				$(this).children('tbody').children('tr').removeClass('J-datagrid-row-selected');
 			}else{
-				$(this).children('tbody').children('tr[data-id='+id+']').removeClass('J-datagrid-row-selected');	
+				$(this).children('tbody').children('tr[data-id='+id+']').removeClass('J-datagrid-row-selected');
 			}
 			$(this).kanTreegrid('setSelected',null);
 		},
-		
+
 		//设置已选节点的数据
 		setSelectedData:function(datas){
-			$(this).kanTreegrid('getTreeContainer').data('selectedDatas', datas); 
+			$(this).kanTreegrid('getTreeContainer').data('selectedDatas', datas);
 		},
 		//取得已选节点的数据
 		getSelectedData:function(){
-			return $(this).kanTreegrid('getTreeContainer').data('selectedDatas'); 	
+			return $(this).kanTreegrid('getTreeContainer').data('selectedDatas');
 		},
 
 
 		//取節點對像数据
 		find:function(id){
 			var datas = $(this).kanTreegrid('getData');
-
 			return $(this).kanTreegrid('_find',id,datas);
 		},
 		_find:function(selectid,datas,deep){
 
 			var $this = $(this);
 			var $row  = $(this).children('tbody').children('tr[data-id='+selectid+']');
-			var deep = typeof(deep)=="undefined" ? 0 : deep ;
+			deep =  deep || 0;
 			$(datas).each(function(index,item){
-				if(item[$this.kanTreegrid('getSetting','idField')]==selectid){
+				if(parseInt(item[$this.kanTreegrid('getSetting','idField')])===parseInt(selectid)){
 					item.$node = $row;
 					$this.data('findCache',item);
 				}else{
 					if(item.children && item.children.length>0){
 						var deep_n = deep+1;
-						$this.data('findCache',$this.kanTreegrid('_find',selectid,item.children,deep_n));	
+						$this.data('findCache',$this.kanTreegrid('_find',selectid,item.children,deep_n));
 					}
 				}
-			})
+			});
 			return $this.data('findCache');
 		},
 
@@ -252,74 +235,68 @@
 			return '<tbody></tbody>';
 		},
 		_domTbody:function(param){
-			
-			var deep = typeof(param.deep)=="undefined" ? 0 : param.deep ;
+
+			var deep = typeof param.deep ==="undefined" ? 0 : param.deep ;
 			var $this = $(this);
 			var colsArray = $this.kanTreegrid('getSetting','columns');
 			var cols = colsArray[0];
 			var datas = param.datas;
 			var $tbody = $this.children('tbody');
 			$(datas).each(function(index,item){
-				//$this.o2a(item);
+
 				//console.log(deep+","+item['catname'])
 				var collapsable = item.children.length>0 ? 'class="tree-collapsable"' : '';
-				var html_td = '<tr '+collapsable+' data-id="'+item[$this.kanTreegrid('getSetting','idField')]+'" data-pid="'+item['parentid']+'">'; 
+				var html_td = '<tr '+collapsable+' data-id="'+item[$this.kanTreegrid('getSetting','idField')]+'" data-pid="'+item.parentid+'">';
 				for(var i=0;i<cols.length;i++){
 					var cellHtml = cols[i].formatter ? cols[i].formatter(item[cols[i].field],item) : item[cols[i].field];
-					if(cols[i].field==$this.kanTreegrid('getSetting','treeField')){
-						
+					if(cols[i].field===$this.kanTreegrid('getSetting','treeField')){
+
 						var icon = item.children.length>0 ? '<span class="J-treeBtn"><i class="fa fa-folder-open"></i></span>' : '<i class="fa fa-file-text-o"></i>';
-						html_td += '<td class="treeField" field="'+cols[i].field+'"><div class="cellwrap" style="padding-left:'+ deep*$this.kanTreegrid('getSetting','deepStep') +'px">'+icon+'&nbsp;<span class="cell">'+cellHtml+'</span></div></td>';	
+						html_td += '<td class="treeField" field="'+cols[i].field+'"><div class="cellwrap" style="padding-left:'+ deep*$this.kanTreegrid('getSetting','deepStep') +'px">'+icon+'&nbsp;<span class="cell">'+cellHtml+'</span></div></td>';
 					}else{
-						html_td += '<td field="'+cols[i].field+'"><div class="cellwrap"><span class="cell">'+cellHtml+'</span></div></td>';	
+						html_td += '<td field="'+cols[i].field+'"><div class="cellwrap"><span class="cell">'+cellHtml+'</span></div></td>';
 					}
-					
+
 				}
 				html_td +="</tr>";
 				$tbody.append(html_td);
 				if(item.children.length>0){
 					var deep_n = deep+1;
-					var paramChildren = {'datas':item.children,'deep':deep_n}
-					$this.kanTreegrid('_domTbody',paramChildren)
+					var paramChildren = {'datas':item.children,'deep':deep_n};
+					$this.kanTreegrid('_domTbody',paramChildren);
 				}
-			})
+			});
 		},
-		o2a : function(o){
-			var arr = [] ;
-			for(var n in o){  
-				arr[n] = o[n] ;
-			}
-			return arr;
-		},
+
 		collapseAll:function(){
 			var $this = this;
 			var $tr = $this.children('tbody').children('tr.tree-collapsable');
-			$tr.each(function(index){
+			$tr.each(function(){
 				var id = $(this).data('id');
 				$this.kanTreegrid('collapse',id);
-			})
+			});
 		},
 		collapse:function(pid){
 			var $this = this;
-			var $row = $(this).children('tbody').children('tr[data-id='+pid+']')
+			var $row = $(this).children('tbody').children('tr[data-id='+pid+']');
 			var $children =$(this).children('tbody').children('tr[data-pid='+pid+']');
 			if($row.hasClass('tree-collapsable')){
-				$row.removeClass('tree-collapsable').addClass('tree-expandable')
+				$row.removeClass('tree-collapsable').addClass('tree-expandable');
 				$row.find('.J-treeBtn .fa').removeClass('fa-folder-open').addClass('fa-folder');
 				$children.each(function(index){
 					var $this_c = $(this);
 					if($this.kanTreegrid('getSetting','animate')){
-						setTimeout(function(){$this_c.hide()},index*50)
+						setTimeout(function(){$this_c.hide();},index*50);
 					}else{
-						$this_c.hide()
+						$this_c.hide();
 					}
-					$(this).attr('data-show','0')
-					
+					$(this).attr('data-show','0');
+
 					var id = $(this).data('id');
 					$this.kanTreegrid('_collapse',id);
-				})
+				});
 			}
-			
+
 		},
 		_collapse:function(pid){
 			var $this = this;
@@ -329,78 +306,77 @@
 				$children.each(function(index){
 					var $this_c = $(this);
 					if($row.hasClass('tree-collapsable')){
-						$(this).attr('data-show','1')
+						$(this).attr('data-show','1');
 					}
 					if($row.hasClass('tree-expandable')){
-						$(this).attr('data-show','0')
+						$(this).attr('data-show','0');
 					}
-					
+
 					if($this.kanTreegrid('getSetting','animate')){
-						setTimeout(function(){$this_c.hide()},index*50)
+						setTimeout(function(){$this_c.hide();},index*50);
 					}else{
-						$this_c.hide()
+						$this_c.hide();
 					}
 					//if($(this).hasClass('tree-expandable')||$(this).hasClass('tree-collapsable')){
 						var id = $(this).data('id');
-						$this.kanTreegrid('_collapse',id);	
+						$this.kanTreegrid('_collapse',id);
 					//}
-					
-				})	
+
+				});
 			}
-			
+
 		},
 		expandAll:function(){
 			var $this = this;
 			var $tr = $this.children('tbody').children('tr.tree-expandable');
-			$tr.each(function(index){
+			$tr.each(function(){
 				var id = $(this).data('id');
 				$this.kanTreegrid('expand',id);
-			})
+			});
 		},
 		expand:function(pid){
 			var $this = this;
-			var $row = $(this).children('tbody').children('tr[data-id='+pid+']')
+			var $row = $(this).children('tbody').children('tr[data-id='+pid+']');
 			var $children =$(this).children('tbody').children('tr[data-pid='+pid+']');
 			if($row.hasClass('tree-expandable')){
-				$row.removeClass('tree-expandable').addClass('tree-collapsable')
+				$row.removeClass('tree-expandable').addClass('tree-collapsable');
 				$row.find('.J-treeBtn .fa').addClass('fa-folder-open').removeClass('fa-folder');
 				$children.each(function(index){
 					var $this_c = $(this);
 					var id = $(this).data('id');
-					$(this).attr('data-show','1')
+					$(this).attr('data-show','1');
 					if($this.kanTreegrid('getSetting','animate')){
-						setTimeout(function(){$this_c.show()},index*50)
+						setTimeout(function(){$this_c.show();},index*50);
 					}else{
-						$this_c.show()
+						$this_c.show();
 					}
-					
-					
+
 					$this.kanTreegrid('_expand',id);
-				})
+				});
 
 			}
-			
+
 		},
 		_expand:function(pid){
 			var $this = this;
 			var $children =$(this).children('tbody').children('tr[data-pid='+pid+']');
 			$children.each(function(index){
 				var $this_c = $(this);
-				if($(this).attr('data-show')=='1'){
+				if($(this).attr('data-show')==='1'){
 					if($(this).hasClass('tree-collapsable')){
 						var id = $(this).data('id');
-						$this.kanTreegrid('_expand',id);	
+						$this.kanTreegrid('_expand',id);
 					}
 					if($this.kanTreegrid('getSetting','animate')){
-						setTimeout(function(){$this_c.show()},index*50)
+						setTimeout(function(){$this_c.show();},index*50);
 					}else{
-						$this_c.show()
+						$this_c.show();
 					}
 				}
-			})
+			});
 		}
 
-	}
+	};
 
 	$.fn.kanTreegrid = function (method) {
 
@@ -414,5 +390,5 @@
         }
 
     };
-    
+
 })(jQuery);
