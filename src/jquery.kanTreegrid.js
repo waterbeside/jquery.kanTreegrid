@@ -8,6 +8,7 @@
 		defaults : {
 			idField:'id'
 			,treeField: 'title'
+			,pidField: 'pid'
 			,animate:true
 			,cache:false
 			//,height:'auto'
@@ -246,7 +247,7 @@
 
 				//console.log(deep+","+item['catname'])
 				var collapsable = item.children.length>0 ? 'class="tree-collapsable"' : '';
-				var html_td = '<tr '+collapsable+' data-id="'+item[$this.kanTreegrid('getSetting','idField')]+'" data-pid="'+item.parentid+'">';
+				var html_td = '<tr '+collapsable+' data-id="'+item[$this.kanTreegrid('getSetting','idField')]+'" data-pid="'+item[$this.kanTreegrid('getSetting','pidField')]+'" data-deep="'+deep+'">';
 				for(var i=0;i<cols.length;i++){
 					var cellHtml = cols[i].formatter ? cols[i].formatter(item[cols[i].field],item) : item[cols[i].field];
 					if(cols[i].field===$this.kanTreegrid('getSetting','treeField')){
